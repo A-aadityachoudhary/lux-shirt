@@ -1,24 +1,22 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+Here I have create required models (in model branch).
+Models are - Admin, User, Product, Order, Order_item, Payment, Category.
 
-* Ruby version
+```
+rails generate model User name:string email:string password:string role:string
 
-* System dependencies
+rails generate model Admin user:references
 
-* Configuration
+rails generate model Category name:string
 
-* Database creation
+rails generate model Product title:string description:text price:decimal stock:integer category:references admin:references 
 
-* Database initialization
+rails generate model Order user:references total_amount:decimal status:string
 
-* How to run the test suite
+rails generate model OrderItem order:references product:references quantity:integer
 
-* Services (job queues, cache servers, search engines, etc.)
+rails generate model Payment order:references total_amount:decimal
 
-* Deployment instructions
-
-* ...
+```
