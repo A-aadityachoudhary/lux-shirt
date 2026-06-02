@@ -1,0 +1,92 @@
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">
+      Admin Products
+    </h1>
+
+    <%= link_to "➕ Add Product",
+        new_admin_product_path,
+        class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow" %>
+  </div>
+
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+
+    <table class="min-w-full divide-y divide-gray-200">
+
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+            Image
+          </th>
+
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+            Title
+          </th>
+
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+            Price
+          </th>
+
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+            Stock
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200 bg-white">
+
+        <% @products.each do |product| %>
+
+          <tr class="hover:bg-gray-50">
+
+            <td class="px-6 py-4">
+              <% if product.product_images.attached? %>
+
+                <%= image_tag product.product_images.first,
+                    class: "w-20 h-20 object-cover rounded-lg border" %>
+
+              <% else %>
+
+                <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-500">
+                  No Image
+                </div>
+
+              <% end %>
+            </td>
+
+            <td class="px-6 py-4 font-medium text-gray-800">
+              <%= product.title %>
+            </td>
+
+            <td class="px-6 py-4 text-green-600 font-semibold">
+              ₹<%= product.price %>
+            </td>
+
+            <td class="px-6 py-4">
+              <% if product.stock > 0 %>
+
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                  <%= product.stock %> Available
+                </span>
+
+              <% else %>
+
+                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+                  Out of Stock
+                </span>
+
+              <% end %>
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

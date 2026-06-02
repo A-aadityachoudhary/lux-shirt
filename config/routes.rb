@@ -2,8 +2,17 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
   resources :products
+  root "products#index"
   resources :orders
-  resources :order_items
+  resources :cart, only: [:show, :destroy]
+  resources :order_items do
+    member do
+      patch :increase_quantity
+      patch :reduce_quantity
+    end
+  end
+
+  resources :users
   namespace :admin do
     resources :products
   end
