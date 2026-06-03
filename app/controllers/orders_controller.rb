@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
     before_action :require_authentication
     def index
-        @orders = Order.all
+        @orders = Current.user.orders.order(created_at: :desc)
     end
 
     def show
@@ -13,7 +13,7 @@ class OrdersController < ApplicationController
     end
 
     def create
-        @order = Order.new(order_params)
+        @order = Current.user.orders.new(order_params)
         @current_cart.order_items.each do |item|
             item.update(
               cart_id: nil,
@@ -27,6 +27,6 @@ class OrdersController < ApplicationController
     end
     private
     def order_params
-        params.require(:order).permit(:name, :email, :address, :pay_method)
+        params.require(:order).permit(:shipping_address, :payment_method)
     end
 end
