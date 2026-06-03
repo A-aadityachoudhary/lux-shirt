@@ -7,9 +7,11 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :current_cart
+
   def current_cart
     if session[:cart_id]
-      cart = Cart.find_by(:id=>session[:cart_id])
+      # Look up existing cart
+      cart = Cart.find_by(id: session[:cart_id])
       if cart.present?
         @current_cart = cart
       else

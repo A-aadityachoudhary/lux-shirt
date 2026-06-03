@@ -1,92 +1,68 @@
-<div class="max-w-7xl mx-auto px-6 py-8">
+<div class="max-w-7xl mx-auto px-4 py-8">
 
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-800">
-      Admin Products
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+    <h1 class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+      Admin Products Control
     </h1>
 
-    <%= link_to "➕ Add Product",
-        new_admin_product_path,
-        class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow" %>
+    <%= link_to new_admin_product_path,
+        class: "bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white px-5 py-3 rounded-xl font-bold shadow-[0_4px_15px_rgba(79,70,229,0.3)] transform hover:-translate-y-0.5 transition duration-200 flex items-center gap-2" do %>
+      <span>➕</span> Add Premium Product
+    <% end %>
   </div>
 
-  <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-
-    <table class="min-w-full divide-y divide-gray-200">
-
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-            Image
-          </th>
-
-          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-            Title
-          </th>
-
-          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-            Price
-          </th>
-
-          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-            Stock
-          </th>
-        </tr>
-      </thead>
-
-      <tbody class="divide-y divide-gray-200 bg-white">
-
-        <% @products.each do |product| %>
-
-          <tr class="hover:bg-gray-50">
-
-            <td class="px-6 py-4">
-              <% if product.product_images.attached? %>
-
-                <%= image_tag product.product_images.first,
-                    class: "w-20 h-20 object-cover rounded-lg border" %>
-
-              <% else %>
-
-                <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-500">
-                  No Image
-                </div>
-
-              <% end %>
-            </td>
-
-            <td class="px-6 py-4 font-medium text-gray-800">
-              <%= product.title %>
-            </td>
-
-            <td class="px-6 py-4 text-green-600 font-semibold">
-              ₹<%= product.price %>
-            </td>
-
-            <td class="px-6 py-4">
-              <% if product.stock > 0 %>
-
-                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                  <%= product.stock %> Available
-                </span>
-
-              <% else %>
-
-                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                  Out of Stock
-                </span>
-
-              <% end %>
-            </td>
-
+  <div class="bg-[#12131c]/90 border border-gray-800/80 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.4)] overflow-hidden backdrop-blur-md">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-800/60">
+        <thead class="bg-[#1a1b26]/70">
+          <tr>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Image</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Title</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Price</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Stock Status</th>
           </tr>
+        </thead>
 
-        <% end %>
+        <tbody class="divide-y divide-gray-800/40 bg-transparent">
+          <% @products.each do |product| %>
+            <tr class="hover:bg-gray-800/20 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if product.product_images.attached? %>
+                  <%= image_tag product.product_images.first,
+                      class: "w-16 h-16 object-cover rounded-xl border border-gray-700/60 shadow-md" %>
+                <% else %>
+                  <div class="w-16 h-16 bg-[#1a1b26] border border-gray-800 rounded-xl flex items-center justify-center text-xs text-gray-500 font-medium">
+                    No Image
+                  </div>
+                <% end %>
+              </td>
 
-      </tbody>
+              <td class="px-6 py-4 whitespace-nowrap font-semibold text-white tracking-wide">
+                <%= product.title %>
+              </td>
 
-    </table>
+              <td class="px-6 py-4 whitespace-nowrap text-emerald-400 font-extrabold text-lg">
+                ₹<%= product.price %>
+              </td>
 
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if product.stock > 0 %>
+                  <span class="inline-flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <%= product.stock %> Available
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center gap-1.5 bg-rose-950/60 border border-rose-500/20 text-rose-400 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                    Out of Stock
+                  </span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

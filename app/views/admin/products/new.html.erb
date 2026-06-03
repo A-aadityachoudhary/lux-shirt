@@ -1,70 +1,74 @@
-<div class="max-w-2xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-8">
+<div class="max-w-2xl mx-auto mt-10 px-4">
 
-  <h1 class="text-3xl font-bold text-center mb-8">
-    Add New Shirt
-  </h1>
+  <div class="bg-[#12131c]/90 border border-gray-800 rounded-3xl p-8 shadow-[0_25px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm">
+    <h1 class="text-3xl font-extrabold text-center text-white tracking-tight mb-8">
+      Add New Shirt Release
+    </h1>
 
-  <%= form_with model: [:admin, @product], class: "space-y-6" do |f| %>
+    <%= form_with model: [:admin, @product], class: "space-y-6" do |f| %>
 
-    <div>
-      <%= f.label :title, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <div>
+        <%= f.label :title, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+        <%= f.text_field :title,
+            placeholder: "e.g., Luxury Egyptian Cotton Slim-Fit",
+            class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+      </div>
 
-      <%= f.text_field :title,
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" %>
-    </div>
+      <div>
+        <%= f.label :description, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+        <%= f.text_area :description,
+            rows: 4,
+            placeholder: "Describe premium weave details, fit specs, fabric characteristics...",
+            class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none shadow-inner" %>
+      </div>
 
-    <div>
-      <%= f.label :description, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <%= f.label :price, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+          <%= f.number_field :price,
+              placeholder: "₹ Value",
+              class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+        </div>
 
-      <%= f.text_area :description,
-          rows: 4,
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" %>
-    </div>
+        <div>
+          <%= f.label :stock, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+          <%= f.number_field :stock,
+              placeholder: "Units Available",
+              class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+        </div>
+      </div>
 
-    <div>
-      <%= f.label :price, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <div>
+        <%= f.label :category_id, "Category Select",
+            class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+        <%= f.collection_select(
+              :category_id,
+              Category.all,
+              :id,
+              :name,
+              { include_blank: false },
+              {
+                class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition cursor-pointer"
+              }
+            ) %>
+      </div>
 
-      <%= f.number_field :price,
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" %>
-    </div>
+      <div>
+        <%= f.label :product_images, "Upload Assets",
+            class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+        <div class="relative w-full bg-[#1a1b26] border border-dashed border-gray-700 rounded-xl p-4 text-center cursor-pointer hover:border-gray-500 transition">
+          <%= f.file_field :product_images,
+              multiple: true,
+              class: "w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-gray-800 file:text-white hover:file:bg-gray-700 cursor-pointer" %>
+        </div>
+      </div>
 
-    <div>
-      <%= f.label :stock, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <div class="pt-4">
+        <%= f.submit "Create Product",
+            class: "w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_4px_20px_rgba(79,70,229,0.3)] hover:shadow-[0_6px_25px_rgba(79,70,229,0.5)] transform hover:-translate-y-0.5 transition duration-200 cursor-pointer uppercase tracking-wider text-sm" %>
+      </div>
 
-      <%= f.number_field :stock,
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" %>
-    </div>
-
-    <div>
-      <%= f.label :category_id, "Category",
-          class: "block text-sm font-medium text-gray-700 mb-2" %>
-
-      <%= f.collection_select(
-            :category_id,
-            Category.all,
-            :id,
-            :name,
-            { include_blank: false },
-            {
-              class: "w-full border border-gray-300 rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            }
-          ) %>
-    </div>
-
-    <div>
-      <%= f.label :product_images, "Product Images",
-          class: "block text-sm font-medium text-gray-700 mb-2" %>
-
-      <%= f.file_field :product_images,
-          multiple: true,
-          class: "w-full border border-gray-300 rounded-lg px-4 py-2 bg-white" %>
-    </div>
-
-    <div class="pt-4">
-      <%= f.submit "Create Product",
-          class: "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 cursor-pointer" %>
-    </div>
-
-  <% end %>
+    <% end %>
+  </div>
 
 </div>

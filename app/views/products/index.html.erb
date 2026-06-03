@@ -1,66 +1,46 @@
-<div class="max-w-7xl mx-auto px-6 py-8">
-
-  <h1 class="text-4xl font-bold text-center mb-10">
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-5xl font-black text-center mb-12 tracking-tight bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">
     Latest Shirts
   </h1>
 
   <% if @products.any? %>
-
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-
       <% @products.each do |product| %>
+        <div class="group bg-[#12131c] border border-gray-800/80 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_15px_40px_rgba(99,102,241,0.15)] overflow-hidden transform hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between">
+          
+          <div class="relative overflow-hidden aspect-[3/4]">
+            <% if product.product_images.attached? %>
+              <%= image_tag product.product_images.first,
+                  class: "w-full h-full object-cover group-hover:scale-110 transition duration-500" %>
+            <% else %>
+              <div class="w-full h-full bg-[#1a1b26] flex items-center justify-center text-gray-600 text-sm font-medium">
+                No Image Available
+              </div>
+            <% end %>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#12131c] via-transparent to-transparent opacity-60"></div>
+          </div>
 
-        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
-
-          <% if product.product_images.attached? %>
-
-            <%= image_tag product.product_images.first,
-                class: "w-full h-64 object-cover" %>
-
-          <% else %>
-
-            <div class="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-500">
-              No Image Available
-            </div>
-
-          <% end %>
-
-          <div class="p-5">
-
-            <h3 class="text-xl font-semibold mb-2">
+          <div class="p-6 pt-4 flex flex-col flex-grow">
+            <h3 class="text-lg font-bold text-white mb-2 tracking-wide truncate">
               <%= product.title %>
             </h3>
-
-            <p class="text-2xl font-bold text-green-600 mb-4">
+            
+            <p class="text-xl font-black text-emerald-400 mb-5 mt-auto">
               ₹<%= product.price %>
             </p>
 
             <%= link_to "View Product",
                 product_path(product),
-                class: "block text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition" %>
-
+                class: "block text-center bg-gray-800 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-blue-600 text-white font-bold py-3 rounded-xl border border-gray-700 group-hover:border-transparent transition-all duration-300 tracking-wide text-sm" %>
           </div>
-
         </div>
-
       <% end %>
-
     </div>
-
   <% else %>
-
-    <div class="bg-white rounded-xl shadow-md p-10 text-center">
-
-      <h2 class="text-2xl font-semibold text-gray-700 mb-3">
-        No Products Available
-      </h2>
-
-      <p class="text-gray-500">
-        Products added by admin will appear here.
-      </p>
-
+    <div class="bg-[#12131c]/60 border border-gray-800 rounded-3xl p-12 text-center max-w-xl mx-auto shadow-xl">
+      <div class="text-5xl mb-4">👔</div>
+      <h2 class="text-2xl font-bold text-white mb-2">No Products Available</h2>
+      <p class="text-gray-400">Exclusive designer edits will appear as soon as they go live.</p>
     </div>
-
   <% end %>
-
 </div>

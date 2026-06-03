@@ -1,72 +1,63 @@
-<div class="max-w-5xl mx-auto px-6 py-8">
-
-  <h1 class="text-3xl font-bold mb-8">
-    My Orders
-  </h1>
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-10">
+    <h1 class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+      <%= Current.user.role == "admin" ? "Global Operations: Orders Ledger" : "My Purchase Ledger" %>
+    </h1>
+  </div>
 
   <% if @orders.any? %>
-
     <div class="space-y-6">
-
       <% @orders.each do |order| %>
-
-        <div class="bg-white shadow-md rounded-xl p-6">
-
-          <div class="flex justify-between items-center">
-
-            <div>
-
-              <h3 class="text-xl font-semibold mb-2">
-                Order #<%= order.id %>
-              </h3>
-
-              <p class="text-gray-600">
-                Status:
-                <span class="font-medium">
-                  <%= order.status %>
+        <div class="bg-[#12131c]/90 border border-gray-800 rounded-2xl p-6 shadow-[0_12px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_40px_rgba(99,102,241,0.1)] transform hover:-translate-y-1 transition duration-300">
+          <div class="flex flex-col lg:flex-row justify-between lg:items-center gap-6">
+            
+            <div class="space-y-2 flex-1">
+              <div class="flex items-center gap-3 flex-wrap">
+                <h3 class="text-xl font-bold text-white">Order #<%= order.id %></h3>
+                <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-950 text-emerald-400 border border-emerald-500/20">
+                  <%= order.status.presence || "Processed" %>
                 </span>
-              </p>
+                <span class="text-xs text-gray-500 font-mono"><%= order.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+              </div>
 
-              <p class="text-lg font-bold text-green-600 mt-2">
-                ₹<%= order.total_amount %>
-              </p>
+              <% if Current.user.role == "admin" && order.user.present? %>
+                <p class="text-sm text-indigo-400 font-medium bg-indigo-950/40 border border-indigo-500/20 px-3 py-1.5 rounded-xl inline-block">
+                  👤 Buyer: <span class="text-white font-semibold"><%= order.user.name %></span> (<%= order.user.email_address %>)
+                </p>
+              <% end %>
 
+              <div class="text-sm text-gray-400 pt-2">
+                <p class="truncate"><span class="text-gray-500 font-medium">Destination:</span> <%= order.shipping_address %></p>
+                <p class="mt-1">
+                  <span class="text-gray-500 font-medium">Items Count:</span> 
+                  <span class="text-gray-200 font-semibold"><%= order.order_items.sum(:quantity) %> items purchased</span>
+                </p>
+              </div>
             </div>
 
-            <div>
+            <div class="flex sm:items-center lg:items-end justify-between lg:flex-col gap-4 border-t lg:border-0 border-gray-800/60 pt-4 lg:pt-0">
+              <div>
+                <p class="text-xs text-gray-500 uppercase tracking-widest text-left lg:text-right font-bold">Total Bill</p>
+                <p class="text-3xl font-black text-emerald-400 tracking-tight mt-0.5">
+                  ₹<%= order.total_amount.presence || order.order_items.sum { |i| i.quantity * i.product.price } %>
+                </p>
+              </div>
 
-              <%= link_to "View Order",
+              <%= link_to "Review Full Details",
                   order_path(order),
-                  class: "bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium" %>
-
+                  class: "bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 px-5 py-2.5 rounded-xl font-bold text-sm tracking-wide shadow transition" %>
             </div>
 
           </div>
-
         </div>
-
       <% end %>
-
     </div>
-
   <% else %>
-
-    <div class="bg-white shadow-md rounded-xl p-10 text-center">
-
-      <h2 class="text-2xl font-semibold text-gray-700 mb-3">
-        No Orders Yet
-      </h2>
-
-      <p class="text-gray-500 mb-6">
-        You haven't placed any orders.
-      </p>
-
-      <%= link_to "Shop Now",
-          products_path,
-          class: "bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg" %>
-
+    <div class="bg-[#12131c]/60 border border-gray-800 rounded-3xl p-12 text-center max-w-xl mx-auto shadow-2xl backdrop-blur-sm">
+      <div class="text-6xl mb-4">📑</div>
+      <h2 class="text-2xl font-bold text-white mb-2">No Order Entries Registered</h2>
+      <p class="text-gray-400 mb-6">Database returns no items found under active parsing filters.</p>
+      <%= link_to "Return to Gallery", products_path, class: "inline-block bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-6 py-3 rounded-xl font-bold" %>
     </div>
-
   <% end %>
-
 </div>
