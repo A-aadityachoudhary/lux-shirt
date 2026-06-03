@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Authentication
+  before_action :require_current_user_presence
   def authenticate_admin
     unless Current.user.role == "admin"
       redirect_to root_path
@@ -7,6 +8,14 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :current_cart
+
+  private
+
+  def require_current_user_presence
+    if respond_to?(:resume_session)
+      resume_session
+    end
+  end
 
   def current_cart
     if session[:cart_id]

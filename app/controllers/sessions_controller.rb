@@ -11,9 +11,9 @@ class SessionsController < ApplicationController
       
       # If user logs in as an administrator, bypass the standard home paths
       if user.role == "admin"
-        redirect_to admin_products_path, notice: "Welcome back to HQ, Admin."
+        redirect_to admin_products_path, notice: "Welcome back, Admin."
       else
-        redirect_to after_authentication_url
+        redirect_to after_authentication_url || root_path, status: :see_other, notice: "Signed in successfully."
       end
     else
       redirect_to new_session_path, alert: "Try another email address or password."

@@ -14,7 +14,7 @@
     <style>
       /* Faster & varied hardware-accelerated 3D translational vectors */
       @keyframes floatCube1 {
-        0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+        0%, 100 { transform: translateY(0px) rotate(0deg) scale(1); }
         50% { transform: translateY(-45px) rotate(180deg) scale(1.08); }
       }
       @keyframes floatCube2 {
@@ -46,7 +46,7 @@
         50% { transform: translateY(-48px) rotate(-70deg) scale(0.92); }
       }
 
-      /* Snappy, highly organic timing configurations */
+      /* Fast timing configurations for high velocity motion mapping */
       .animate-cube-1 { animation: floatCube1 7.5s ease-in-out infinite; }
       .animate-cube-2 { animation: floatCube2 10.5s ease-in-out infinite; }
       .animate-cube-3 { animation: floatCube3 8.5s ease-in-out infinite; }
@@ -61,49 +61,41 @@
   <body class="bg-gradient-to-tr from-[#07080a] via-[#0d0e12] to-[#14161f] text-gray-100 min-h-screen font-sans relative overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-300">
 
     <div class="fixed inset-0 z-[-1] pointer-events-none overflow-hidden select-none opacity-75">
-      
       <div class="absolute top-[10%] left-[5%] w-[45vw] h-[45vw] bg-indigo-600/15 blur-[120px] rounded-full"></div>
       <div class="absolute bottom-[15%] right-[5%] w-[50vw] h-[50vw] bg-emerald-600/10 blur-[140px] rounded-full"></div>
       
       <div class="absolute top-[12%] right-[8%] w-24 h-24 bg-gradient-to-br from-indigo-500/35 via-slate-800/60 to-black border border-indigo-400/40 rounded-2xl animate-cube-1 shadow-[0_20px_45px_rgba(99,102,241,0.25)] backdrop-blur-[2px] flex items-center justify-center transform rotate-12">
         <div class="w-12 h-12 border border-white/10 rounded-lg bg-gradient-to-tr from-white/0 to-white/20"></div>
       </div>
-
       <div class="absolute top-[38%] left-[5%] w-18 h-18 bg-gradient-to-tr from-emerald-500/30 via-slate-900/80 to-transparent border border-emerald-400/40 rounded-xl animate-cube-2 shadow-[0_15px_30px_rgba(16,185,129,0.2)] transform -rotate-45"></div>
-
       <div class="absolute bottom-[10%] right-[15%] w-32 h-32 bg-gradient-to-tl from-slate-900 via-[#181a26]/60 to-indigo-900/20 border border-gray-700 rounded-3xl animate-cube-3 shadow-[10px_30px_60px_rgba(0,0,0,0.6)] transform rotate-45 flex items-center justify-center">
         <div class="w-20 h-20 border border-gray-600/40 rounded-2xl"></div>
       </div>
-
       <div class="absolute top-[8%] left-[22%] w-14 h-14 bg-gradient-to-br from-slate-800 to-indigo-500/30 border border-indigo-400/30 rounded-xl animate-cube-4 shadow-xl"></div>
-
       <div class="absolute bottom-[22%] left-[28%] w-20 h-20 bg-gradient-to-b from-[#1b1c26] to-transparent border border-gray-700 rounded-2xl animate-cube-5 shadow-2xl flex items-center justify-center">
         <div class="w-10 h-10 border border-gray-600/30 rounded-lg"></div>
       </div>
-
       <div class="absolute top-[5%] left-[52%] w-16 h-16 bg-gradient-to-r from-slate-900/80 to-indigo-500/20 border border-indigo-500/40 rounded-xl animate-cube-6 shadow-lg transform rotate-6"></div>
-
       <div class="absolute bottom-[8%] left-[8%] w-24 h-24 bg-gradient-to-tr from-[#13141f] via-slate-900 to-emerald-500/10 border border-gray-700 rounded-2xl animate-cube-7 shadow-2xl flex items-center justify-center">
         <div class="w-12 h-12 border border-emerald-500/10 rounded-xl"></div>
       </div>
-
       <div class="absolute top-[52%] right-[6%] w-16 h-16 bg-gradient-to-bl from-indigo-900/40 via-[#11121a] to-black border border-gray-700 rounded-xl animate-cube-8 shadow-[0_12px_25px_rgba(0,0,0,0.5)]"></div>
-      
     </div>
+  
+    <% unless current_page?(new_session_path) || current_page?(new_user_path) %>
+      <nav class="sticky top-0 z-50 bg-[#12131c]/75 backdrop-blur-md border-b border-gray-800/50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-    <nav class="sticky top-0 z-50 bg-[#12131c]/75 backdrop-blur-md border-b border-gray-800/50 transition-all duration-300">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <%= link_to root_path, class: "text-2xl font-extrabold tracking-widest bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent transform hover:scale-105 transition duration-300" do %>
+        LUX<span class="text-emerald-400 font-light">SHIRT</span>
+      <% end %>
 
-        <%= link_to root_path, class: "text-2xl font-extrabold tracking-widest bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent transform hover:scale-105 transition duration-300" do %>
-          LUX<span class="text-emerald-400 font-light">SHIRT</span>
-        <% end %>
+      <div class="flex items-center gap-5">
+        <%= link_to "Products",
+            products_path,
+            class: "text-gray-300 hover:text-white font-medium tracking-wide transition relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300" %>
 
-        <div class="flex items-center gap-5">
-          <%= link_to "Products",
-              products_path,
-              class: "text-gray-300 hover:text-white font-medium tracking-wide transition relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-emerald-400 hover:after:w-full after:transition-all after:duration-300" %>
-
-          <% if Current.user.present? %>
+        <% if authenticated? %>
             
             <%= link_to "Orders",
                 orders_path,
@@ -112,30 +104,32 @@
             <%= link_to "Cart",
                 cart_path(@current_cart),
                 class: "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-5 py-2 rounded-xl font-medium shadow-[0_4px_12px_rgba(16,185,129,0.3)] transform hover:-translate-y-0.5 transition duration-200" %>
-            
-            <% if Current.user&.role == "admin" %>
-              <%= link_to "Admin Panel",
-                  admin_products_path,
-                  class: "bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white px-5 py-2 rounded-xl font-medium shadow-[0_4px_12px_rgba(217,119,6,0.3)] transform hover:-translate-y-0.5 transition duration-200" %>
-            <% end %>
-
-            <%= button_to "Logout",
-                session_path,
-                method: :delete,
-                class: "bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white px-5 py-2 rounded-xl font-medium shadow-[0_4px_12px_rgba(225,29,72,0.2)] transform hover:-translate-y-0.5 transition duration-200 cursor-pointer" %>
-          <% else %>
-            <%= link_to "Login",
-                new_session_path,
-                class: "bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 px-5 py-2 rounded-xl font-medium transform hover:-translate-y-0.5 transition duration-200" %>
-
-            <%= link_to "Register",
-                new_user_path,
-                class: "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-5 py-2 rounded-xl font-medium shadow-[0_4px_12px_rgba(16,185,129,0.2)] transform hover:-translate-y-0.5 transition duration-200" %>
+                
+          <% if Current.user.role == "admin" %>
+            <%= link_to "Admin Panel",
+                admin_products_path,
+                class: "bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white px-5 py-2 rounded-xl font-medium shadow-[0_4px_12px_rgba(217,119,6,0.3)] transform hover:-translate-y-0.5 transition duration-200" %>
           <% end %>
-        </div>
-      </div>
-    </nav>
 
+          <%= button_to "Logout",
+              session_path,
+              method: :delete,
+              class: "bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white px-5 py-2 rounded-xl font-medium shadow-[0_4px_12px_rgba(225,29,72,0.2)] transform hover:-translate-y-0.5 transition duration-200 cursor-pointer" %>
+
+        <% else %>
+          <%= link_to "Login",
+              new_session_path,
+              class: "bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 px-5 py-2 rounded-xl font-medium transform hover:-translate-y-0.5 transition duration-200" %>
+
+          <%= link_to "Register",
+              new_user_path,
+              class: "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-5 py-2 rounded-xl font-medium shadow-[0_4px_12px_rgba(16,185,129,0.2)] transform hover:-translate-y-0.5 transition duration-200" %>
+        <% end %>
+      </div>
+    </div>
+    </nav>
+  <% end %>
+  
     <div class="max-w-7xl mx-auto px-6 py-8 relative z-10">
       <% if notice %>
         <div class="bg-emerald-950/40 backdrop-blur-md border border-emerald-500/30 text-emerald-300 px-5 py-4 rounded-xl mb-6 shadow-[0_4px_12px_rgba(16,185,129,0.1)] flex items-center gap-3">
