@@ -31,14 +31,14 @@ production:
     adapter: postgresql
     url: <%= ENV.fetch("DATABASE_URL") %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/cache_migrate
+    database_tasks: false
   queue:
     adapter: postgresql
     url: <%= ENV.fetch("DATABASE_URL") %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/queue_migrate
+    database_tasks: false
   cable:
     adapter: postgresql
     url: <%= ENV.fetch("DATABASE_URL") %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    migrations_paths: db/cable_migrate
+    database_tasks: false
