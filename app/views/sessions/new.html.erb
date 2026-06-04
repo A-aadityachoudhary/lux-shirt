@@ -1,0 +1,62 @@
+<div class="max-w-md mx-auto mt-16 px-4">
+  <div class="bg-[#12131c]/90 border border-gray-800 rounded-3xl p-8 shadow-[0_25px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm">
+    
+    <h1 class="text-3xl font-extrabold text-center text-white mb-8 tracking-tight">
+      Sign In
+    </h1>
+
+    <% if flash[:alert] %>
+      <div class="bg-rose-950/50 border border-rose-500/30 text-rose-400 px-4 py-3 rounded-xl mb-4 text-sm">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
+    <% if flash[:notice] %>
+      <div class="bg-emerald-950/50 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-xl mb-4 text-sm">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <%= form_with url: session_path, class: "space-y-5" do |form| %>
+      <div>
+        <%= form.label :email_address,
+            class: "block text-sm font-semibold text-gray-300 mb-2" %>
+        <%= form.email_field :email_address,
+            required: true,
+            autofocus: true,
+            autocomplete: "username",
+            placeholder: "name@example.com",
+            value: params[:email_address],
+            class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+      </div>
+
+      <div>
+        <%= form.label :password,
+            class: "block text-sm font-semibold text-gray-300 mb-2" %>
+        <%= form.password_field :password,
+            required: true,
+            autocomplete: "current-password",
+            maxlength: 72,
+            placeholder: "••••••••",
+            class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+      </div>
+
+      <%= form.submit "Sign In",
+          class: "w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-600/20 transform hover:-translate-y-0.5 transition duration-200 cursor-pointer tracking-wide" %>
+    <% end %>
+
+    <div class="mt-8 pt-6 border-t border-gray-800 text-center text-sm">
+      <%= link_to "Forgot Password?",
+          new_password_path,
+          class: "text-indigo-400 hover:text-indigo-300 font-medium transition" %>
+    </div>
+
+    <div class="mt-2 text-center text-sm text-gray-400">
+      Don't have an account?
+      <%= link_to "Register",
+          new_user_path,
+          class: "text-emerald-400 hover:text-emerald-300 font-bold transition ml-1" %>
+    </div>
+
+  </div>
+</div>

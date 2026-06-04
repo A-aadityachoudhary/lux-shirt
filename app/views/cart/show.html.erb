@@ -1,0 +1,101 @@
+<div class="max-w-5xl mx-auto px-4 py-8">
+
+  <h1 class="text-4xl font-black mb-10 tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+    Your Cart Selection
+  </h1>
+
+  <% grand_total = 0 %>
+
+  <% # SECURITY CHECK: Only evaluate if there are active, non-archived products %>
+  <% active_cart_items = @cart.order_items.select { |item| item.product&.active? } %>
+
+  <% if active_cart_items.any? %>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      
+      <div class="lg:col-span-2 space-y-6">
+        <% @cart.order_items.each do |item| %>
+          <% # EXTRA RUNTIME SECURITY: Skip rendering if the product was archived %>
+          <% next unless item.product&.active? %>
+
+          <div class="bg-[#12131c]/90 border border-gray-800/80 rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex flex-col sm:flex-row gap-6 items-start sm:items-center transform hover:scale-[1.01] transition duration-200">
+            
+            <div class="w-full sm:w-32 h-32 flex-shrink-0 overflow-hidden rounded-xl border border-gray-800 bg-[#1a1b26]">
+              <% if item.product.product_images.attached? %>
+                <%= image_tag item.product.product_images.first,
+                    class: "w-full h-full object-cover" %>
+              <% end %>
+            </div>
+
+            <div class="flex-1 w-full">
+              <h3 class="text-xl font-bold text-white mb-1 tracking-wide">
+                <%= item.product.title %>
+              </h3>
+              
+              <p class="text-gray-400 font-medium text-sm mb-4">
+                Unit Price: <span class="text-white">₹<%= item.product.price %></span>
+              </p>
+
+              <div class="flex flex-wrap items-center justify-between gap-4 bg-[#1a1b26] border border-gray-800 p-3 rounded-xl shadow-inner">
+                <div class="flex items-center gap-3">
+                  <%= button_to reduce_quantity_order_item_path(item),
+                      method: :patch,
+                      class: "bg-gray-800 hover:bg-rose-950/80 border border-gray-700 hover:border-rose-500/30 text-rose-400 w-9 h-9 rounded-lg font-bold flex items-center justify-center transition cursor-pointer" do %>
+                    <span>−</span>
+                  <% end %>
+
+                  <span class="text-white font-extrabold text-lg px-2 w-6 text-center">
+                    <%= item.quantity %>
+                  </span>
+
+                  <%= button_to increase_quantity_order_item_path(item),
+                      method: :patch,
+                      class: "bg-gray-800 hover:bg-emerald-950/80 border border-gray-700 hover:border-emerald-500/30 text-emerald-400 w-9 h-9 rounded-lg font-bold flex items-center justify-center transition cursor-pointer" do %>
+                    <span>+</span>
+                  <% end %>
+                </div>
+
+                <p class="text-lg font-black text-emerald-400">
+                  ₹<%= item.quantity * item.product.price %>
+                </p>
+              </div>
+            </div>
+
+          </div>
+          <% grand_total += item.quantity * item.product.price %>
+        <% end %>
+      </div>
+
+      <div class="bg-[#12131c] border border-gray-800 rounded-2xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.4)] sticky top-24">
+        <h3 class="text-lg font-bold text-gray-400 uppercase tracking-wider mb-4 pb-3 border-b border-gray-800">
+          Summary
+        </h3>
+        
+        <div class="flex justify-between items-baseline mb-8">
+          <span class="text-gray-400 font-medium">Grand Total</span>
+          <span class="text-3xl font-black text-emerald-400 tracking-tight">
+            ₹<%= grand_total %>
+          </span>
+        </div>
+
+        <%= link_to "Proceed To Checkout",
+            new_order_path,
+            class: "block text-center w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 rounded-xl shadow-[0_4px_20px_rgba(16,185,129,0.3)] hover:shadow-[0_6px_25px_rgba(16,185,129,0.5)] transform hover:-translate-y-0.5 transition duration-200 tracking-wide text-sm uppercase" %>
+      </div>
+
+    </div>
+  <% else %>
+    <div class="bg-[#12131c]/60 border border-gray-800 rounded-3xl p-12 text-center shadow-2xl backdrop-blur-sm max-w-xl mx-auto">
+      <div class="text-6xl mb-4">🛒</div>
+      <h2 class="text-2xl font-bold text-white mb-3">
+        Your cart is empty
+      </h2>
+      <p class="text-gray-400 mb-8 max-w-xs mx-auto">
+        Curate your personal collection. Choose from our luxury shirts styles.
+      </p>
+      <%= link_to "Continue Shopping",
+          products_path,
+          class: "inline-block bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white px-8 py-3.5 rounded-xl font-bold tracking-wide shadow-md transform hover:-translate-y-0.5 transition duration-200" %>
+    </div>
+  <% end %>
+
+</div>

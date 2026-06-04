@@ -1,0 +1,113 @@
+<div class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+    <h1 class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+      Inventory Control Dashboard
+    </h1>
+
+    <%= link_to new_admin_product_path,
+        class: "bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white px-5 py-3 rounded-xl font-bold shadow-[0_4px_15px_rgba(79,70,229,0.3)] transform hover:-translate-y-0.5 transition duration-200 flex items-center gap-2" do %>
+      <span>➕</span> Add Premium Product
+    <% end %>
+  </div>
+
+  <details open class="group border border-gray-800 bg-[#12131c]/90 rounded-2xl overflow-hidden shadow-xl transition-all duration-300">
+    <summary class="flex justify-between items-center px-6 py-5 bg-[#161722] cursor-pointer font-bold text-lg text-white select-none list-none outline-none">
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400">🟢</span>
+        <span>Present Active Products (<%= @active_products.count %>)</span>
+      </div>
+      <span class="transition-transform group-open:rotate-180 text-gray-500 text-xs">▼</span>
+    </summary>
+    
+    <div class="overflow-x-auto border-t border-gray-800/60">
+      <table class="min-w-full divide-y divide-gray-800/40">
+        <thead class="bg-[#1a1b26]/50">
+          <tr>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Image</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Title</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Price</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Stock Status</th>
+            <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Operations</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800/40 bg-transparent">
+          <% if @active_products.empty? %>
+            <tr><td colspan="5" class="px-6 py-10 text-center text-sm text-gray-500">No active items found on storefront.</td></tr>
+          <% end %>
+          <% @active_products.each do |product| %>
+            <tr class="hover:bg-gray-800/10 transition">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <%= image_tag(product.product_images.first, class: "w-12 h-12 object-cover rounded-xl border border-gray-700") if product.product_images.attached? %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap font-semibold text-white"><%= product.title %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-emerald-400 font-bold">₹<%= product.price %></td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center gap-1.5 bg-emerald-950/60 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/20">
+                  <%= product.stock %> Units
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="inline-flex items-center gap-3">
+                  <%= link_to "Edit", edit_admin_product_path(product), class: "text-indigo-400 hover:text-indigo-300 font-bold text-xs uppercase bg-indigo-950/40 border border-indigo-500/30 px-3 py-1.5 rounded-xl transition" %>
+                  <%= button_to "Archive", admin_product_path(product), method: :delete, class: "text-amber-400 hover:text-amber-300 font-bold text-xs uppercase bg-amber-950/40 border border-amber-500/30 px-3 py-1.5 rounded-xl transition cursor-pointer" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="group border border-gray-800 bg-[#12131c]/90 rounded-2xl overflow-hidden shadow-xl transition-all duration-300">
+    <summary class="flex justify-between items-center px-6 py-5 bg-[#161722] cursor-pointer font-bold text-lg text-white select-none list-none outline-none">
+      <div class="flex items-center gap-3">
+        <span class="text-rose-400">🔴</span>
+        <span>Past Inactive Products (<%= @archived_products.count %>)</span>
+      </div>
+      <span class="transition-transform group-open:rotate-180 text-gray-500 text-xs">▼</span>
+    </summary>
+    
+    <div class="overflow-x-auto border-t border-gray-800/60">
+      <table class="min-w-full divide-y divide-gray-800/40">
+        <thead class="bg-[#1a1b26]/50">
+          <tr>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Image</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Title</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Price</th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Historical Stock</th>
+            <th class="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">Operations</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800/40 bg-transparent opacity-75">
+          <% if @archived_products.empty? %>
+            <tr><td colspan="5" class="px-6 py-10 text-center text-sm text-gray-500">No archived/past items in memory.</td></tr>
+          <% end %>
+          <% @archived_products.each do |product| %>
+            <tr class="hover:bg-gray-800/10 transition line-through decoration-gray-700">
+              <td class="px-6 py-4 whitespace-nowrap grayscale">
+                <%= image_tag(product.product_images.first, class: "w-12 h-12 object-cover rounded-xl border border-gray-800") if product.product_images.attached? %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-400"><%= product.title %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-gray-400">₹<%= product.price %></td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center bg-gray-900 text-gray-500 px-3 py-1 rounded-full text-xs font-bold border border-gray-800">
+                  <%= product.stock %> Units Left
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium no-underline">
+                <%= button_to toggle_active_admin_product_path(product), 
+                    method: :patch, 
+                    class: "inline-block text-emerald-400 hover:text-emerald-300 font-bold text-xs uppercase bg-emerald-950/40 border border-emerald-500/30 px-4 py-1.5 rounded-xl transition cursor-pointer" do %>
+                  ⚡ Make Active Again
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+</div>

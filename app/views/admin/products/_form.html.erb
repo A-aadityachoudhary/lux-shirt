@@ -1,0 +1,73 @@
+<%= form_with model: [:admin, product], class: "space-y-6" do |f| %>
+
+  <div>
+    <%= f.label :title, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+    <%= f.text_field :title,
+        placeholder: "e.g., Luxury Egyptian Cotton Slim-Fit",
+        class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+    <%= f.text_area :description,
+        rows: 4,
+        placeholder: "Describe premium weave details, fit specs, fabric characteristics...",
+        class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none shadow-inner" %>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div>
+      <%= f.label :price, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+      <%= f.number_field :price,
+          placeholder: "₹ Value",
+          class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+    </div>
+
+    <div>
+      <%= f.label :stock, class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+      <%= f.number_field :stock,
+          placeholder: "Units Available",
+          class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :category_id, "Category Select",
+        class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+    <%= f.collection_select(
+          :category_id,
+          Category.all,
+          :id,
+          :name,
+          { include_blank: false },
+          { class: "w-full bg-[#1a1b26] text-white border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition cursor-pointer" }
+        ) %>
+  </div>
+
+  <div>
+    <%= f.label :product_images, "Upload Assets", class: "block text-sm font-semibold text-gray-300 mb-2 tracking-wide" %>
+    
+    <% if product.product_images.attached? %>
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        <% product.product_images.each do |image| %>
+          <div class="relative rounded-lg overflow-hidden border border-gray-700">
+            <%= image_tag image, class: "w-full h-16 object-cover" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="relative w-full bg-[#1a1b26] border border-dashed border-gray-700 rounded-xl p-4 text-center cursor-pointer hover:border-gray-500 transition">
+      <%= f.file_field :product_images,
+          multiple: true,
+          class: "w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-gray-800 file:text-white hover:file:bg-gray-700 cursor-pointer" %>
+    </div>
+  </div>
+
+  <div class="pt-4 flex gap-4">
+    <%= link_to "Cancel", admin_products_path, class: "w-1/3 bg-gray-800 hover:bg-gray-700 text-white font-bold py-4 rounded-xl text-center border border-gray-700 transition duration-200" %>
+    <%= f.submit button_label,
+        class: "w-2/3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_4px_20px_rgba(79,70,229,0.3)] hover:shadow-[0_6px_25px_rgba(79,70,229,0.5)] transform hover:-translate-y-0.5 transition duration-200 cursor-pointer uppercase tracking-wider text-sm" %>
+  </div>
+
+<% end %>

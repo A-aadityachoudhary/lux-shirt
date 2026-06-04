@@ -5,13 +5,13 @@ one:
   description: MyText
   price: 9.99
   stock: 1
+  user: one
   category: one
-  admin: one
 
 two:
   title: MyString
   description: MyText
   price: 9.99
   stock: 1
+  user: two
   category: two
-  admin: two
