@@ -6,11 +6,17 @@
 
   <% grand_total = 0 %>
 
-  <% if @cart.order_items.any? %>
+  <% # SECURITY CHECK: Only evaluate if there are active, non-archived products %>
+  <% active_cart_items = @cart.order_items.select { |item| item.product&.active? } %>
+
+  <% if active_cart_items.any? %>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       
       <div class="lg:col-span-2 space-y-6">
         <% @cart.order_items.each do |item| %>
+          <% # EXTRA RUNTIME SECURITY: Skip rendering if the product was archived %>
+          <% next unless item.product&.active? %>
+
           <div class="bg-[#12131c]/90 border border-gray-800/80 rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex flex-col sm:flex-row gap-6 items-start sm:items-center transform hover:scale-[1.01] transition duration-200">
             
             <div class="w-full sm:w-32 h-32 flex-shrink-0 overflow-hidden rounded-xl border border-gray-800 bg-[#1a1b26]">

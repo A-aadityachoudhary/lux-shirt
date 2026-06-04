@@ -23,6 +23,14 @@ class OrdersController < ApplicationController
   end
 
   def create
+    if @current_cart.order_items.any? { |item| !item.product&.active? }
+      
+      # Run a quick forced cleanup just in case
+      @current_cart.order_items.each { |item| item.destroy unless item.product&.active? }
+      
+      redirect_to cart_path(@current_cart), alert: "Some premium items in your cart became unavailable and were removed. Please review your balance before checking out."
+      return
+    end
     @order = Current.user.orders.new(order_params)
     @order.status = "Pending" if @order.respond_to?(:status)
 
