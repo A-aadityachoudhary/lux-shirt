@@ -11,8 +11,8 @@
 if User.find_by(email: 'admin@luxshirt.com').nil?
   User.create!(
     name: 'Admin',
-    email: 'admin@luxshirt.com',
-    password: 'Admin@123',
+    email_address: 'admin@gmail.com',
+    password: '992838',
     role: 'admin'
   )
   puts "Admin user created!"
