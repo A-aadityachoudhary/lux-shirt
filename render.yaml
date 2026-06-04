@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: lux-shirt-store
+    runtime: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec rails server"
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false 
+      - key: DATABASE_PATH
+        value: /data/production.sqlite3
+    disk:
+      name: sqlite-storage
+      mountPath: /data
+      sizeGB: 1
