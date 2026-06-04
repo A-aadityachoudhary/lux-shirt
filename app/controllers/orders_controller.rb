@@ -26,26 +26,64 @@ class OrdersController < ApplicationController
     @order = Current.user.orders.new(order_params)
     @order.status = "Pending" if @order.respond_to?(:status)
 
-    # 1. Save the order container first so it achieves a real ID
-    if @order.save
-      # 2. Re-route the active cart items into this saved order container
-      @current_cart.order_items.each do |item|
-        item.update(order_id: @order.id)
-      end
-
-      # 3. Trigger the calculator method now that items are bound to it
-      @order.calculate_total_amount
-      @order.save # Re-save the final calculated total amount string
-
-      # 4. Safely detach items from the temporary cart session & wipe it cleanly
-      @current_cart.order_items.update_all(cart_id: nil)
-      Cart.destroy(session[:cart_id])
-      session[:cart_id] = nil
+    # 1. PRE-CHECK VALIDATIONS FIRST: Ensure every item actually fits within stock limits
+    # We build the association in memory first to force the OrderItem validations to run.
+    stock_is_valid = true
+    
+    @current_cart.order_items.each do |cart_item|
+      # Build a temporary item linked to this order in memory to check its validation rule
+      temp_item = @order.order_items.build(
+        product_id: cart_item.product_id,
+        quantity: cart_item.quantity
+      )
       
-      redirect_to order_path(@order), notice: "Thank you for your premium purchase!"
-    else
-      render :new, status: :unprocessable_entity
+      unless temp_item.valid?
+        stock_is_valid = false
+        @order.errors.add(:base, "Item '#{cart_item.product.title}' exceeds available stock limit.")
+      end
     end
+
+    # 2. INTERCEPT INSUFFICIENT STOCK: If any validation failed, stop immediately!
+    unless stock_is_valid
+      # Clear the temporary in-memory items so the form doesn't duplicate them on render
+      @order.order_items.clear 
+      flash.now[:alert] = "Order could not be created. One or more items exceed available stock."
+      render :new, status: :unprocessable_entity and return
+    end
+
+    # 3. DATABASE TRANSACTION: Only enter here if everything is 100% valid
+    ActiveRecord::Base.transaction do
+      # Since we already verified stock availability, we can now safely save the base order shell
+      if @order.save
+        
+        # Move the real cart items over to the saved order container
+        @current_cart.order_items.each do |item|
+          item.update!(order_id: @order.id)
+          
+          # Deduct stock safely from the product record
+          product = item.product
+          product.update!(stock: product.stock - item.quantity)
+        end
+
+        # Calculate the final bills and secure the instance
+        @order.calculate_total_amount
+        @order.save!
+
+        # Wipe out the temporary cart tracking sessions cleanly
+        @current_cart.order_items.update_all(cart_id: nil)
+        Cart.destroy(session[:cart_id])
+        session[:cart_id] = nil
+        
+        redirect_to order_path(@order), notice: "Thank you for your premium purchase!"
+      else
+        render :new, status: :unprocessable_entity
+      end
+    end
+
+  rescue ActiveRecord::RecordInvalid => e
+    # Fallback exception boundary catcher
+    @order.order_items.clear if @order.present?
+    redirect_to cart_path(@current_cart), alert: "Checkout aborted: System validation error encountered."
   end
 
   def update
