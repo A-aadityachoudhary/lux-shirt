@@ -48,9 +48,23 @@ class OrdersController < ApplicationController
     end
   end
 
+  def update
+    @order = Order.find(params[:id])
+    
+    if Current.user.role == "admin"
+      if @order.update(order_params)
+        redirect_to order_path(@order), notice: "Order ##{@order.id} status updated to #{@order.status}."
+      else
+        redirect_to order_path(@order), alert: "Failed to update order status."
+      end
+    else
+      redirect_to orders_path, alert: "Unauthorized access operational controls."
+    end
+  end
+
   private
 
   def order_params
-    params.require(:order).permit(:shipping_address, :payment_method)
+    params.require(:order).permit(:shipping_address, :payment_method, :status)
   end
 end

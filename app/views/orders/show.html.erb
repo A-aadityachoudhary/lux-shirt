@@ -1,16 +1,35 @@
 <div class="max-w-4xl mx-auto px-4 py-8">
   <div class="bg-[#12131c]/90 border border-gray-800 rounded-3xl p-8 shadow-[0_30px_60px_rgba(0,0,0,0.4)]">
     
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-gray-800">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-b-gray-800">
       <div>
         <h1 class="text-3xl font-black text-white tracking-tight">Order Details Ledger</h1>
         <p class="text-xs text-gray-500 font-mono mt-1">Transaction ID Reference Key: #<%= @order.id %></p>
       </div>
-      <div class="text-left sm:text-right">
-        <span class="inline-block bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 px-5 py-2 rounded-full font-bold text-xs tracking-wider uppercase">
-          <%= @order.status.presence || "Settled" %>
-        </span>
-        <p class="text-xs text-gray-400 font-medium mt-2"><%= @order.created_at.strftime("%d %B %Y at %H:%M Local") %></p>
+      <div class="text-left sm:text-right flex flex-col items-start sm:items-end gap-2">
+        
+        <% if Current.user.role == "admin" %>
+          <%= form_with model: @order, method: :patch, class: "flex items-center gap-2 bg-[#161722] border border-amber-500/20 px-3 py-1.5 rounded-xl shadow-inner" do |f| %>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-amber-500">Status:</span>
+            <%= f.select :status, 
+                [["Pending", "Pending"], ["Processing", "Processing"], ["Delivered", "Delivered"]], 
+                { selected: @order.status.presence || "Pending" }, 
+                class: "bg-transparent text-xs font-bold uppercase tracking-wider text-amber-400 outline-none cursor-pointer border-0 p-0 pr-6" %>
+            <%= f.submit "Apply", 
+                class: "bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-lg shadow cursor-pointer transition duration-200" %>
+          <% end %>
+        <% else %>
+          <% status_style = case @order.status
+                            when "Delivered" then "bg-emerald-950/80 border-emerald-500/30 text-emerald-400"
+                            when "Processing" then "bg-amber-950/80 border-amber-500/30 text-amber-400"
+                            else "bg-indigo-950/80 border-indigo-500/30 text-indigo-400"
+                            end %>
+          <span class="inline-block border <%= status_style %> px-5 py-2 rounded-full font-bold text-xs tracking-wider uppercase">
+            <%= @order.status.presence || "Pending" %>
+          </span>
+        <% end %>
+
+        <p class="text-xs text-gray-400 font-medium"><%= @order.created_at.in_time_zone('Mumbai').strftime("%B %d, %Y at %I:%M %p") %></p>
       </div>
     </div>
 
@@ -44,13 +63,13 @@
       <% @order.order_items.each do |item| %>
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border border-gray-800 bg-[#1a1b26]/30 rounded-2xl p-4 gap-4">
           <div class="flex items-center gap-4">
-            <% if item.product.product_images.attached? %>
+            <% if item.product.respond_to?(:product_images) && item.product.product_images.attached? %>
               <%= image_tag item.product.product_images.first, class: "w-16 h-16 object-cover rounded-xl border border-gray-700/60 shadow-md" %>
             <% else %>
               <div class="w-16 h-16 bg-[#1a1b26] border border-gray-800 rounded-xl"></div>
             <% end %>
             <div>
-              <h3 class="font-bold text-base text-white"><%= item.product.title %></h3>
+              <h3 class="font-bold text-base text-white"><%= item.product.respond_to?(:title) ? item.product.title : item.product.name %></h3>
               <p class="text-gray-400 text-sm font-medium">Base Unit Price: ₹<%= item.product.price %></p>
             </div>
           </div>
@@ -72,7 +91,7 @@
     </div>
 
     <div class="mt-8 flex gap-4">
-      <%= link_to "Back to Audit List", orders_path, class: "inline-block bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 px-6 py-3 rounded-xl font-semibold transition text-sm tracking-wide" %>
+      <%= link_to "Back to Audit List", orders_path, class: "inline-block bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 px-6 py-3 rounded-xl font-semibold transition text-sm tracking-wide shadow-sm" %>
     </div>
   </div>
 </div>
