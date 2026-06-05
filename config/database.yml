@@ -23,22 +23,6 @@ test:
 # Production uses a managed PostgreSQL cluster on Render.
 # The connection string is automatically injected via the DATABASE_URL environment variable.
 production:
-  primary:
-    adapter: postgresql
-    url: <%= ENV.fetch("DATABASE_URL") %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  cache:
-    adapter: postgresql
-    url: <%= ENV.fetch("DATABASE_URL") %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    database_tasks: false
-  queue:
-    adapter: postgresql
-    url: <%= ENV.fetch("DATABASE_URL") %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    database_tasks: false
-  cable:
-    adapter: postgresql
-    url: <%= ENV.fetch("DATABASE_URL") %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    database_tasks: false
+  <<: *default
+  # Using brackets [] returns 'nil' instead of crashing if the key is missing locally
+  url: <%= ENV["DATABASE_URL"] %>

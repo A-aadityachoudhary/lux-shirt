@@ -18,7 +18,6 @@ class ApplicationController < ActionController::Base
   end
 
   def current_cart
-  return unless Current.user  # Don't create cart for guests
 
   if session[:cart_id]
     cart = Cart.find_by(id: session[:cart_id])
